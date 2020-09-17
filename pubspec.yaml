@@ -23,8 +23,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.5
+  
   firebase_auth: ^0.14.0+5
   firebase_dynamic_links: ^0.5.1
+
+  google_sign_in: ^4.5.3
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -34,6 +39,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_icon.png"
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -53,6 +64,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -80,6 +92,9 @@ flutter:
     - family: Pacifico-Regular
       fonts:
         - asset: assets/fonts/Pacifico-Regular.ttf
+    - family: PatrickHand-Regular
+      fonts:
+        - asset: assets/fonts/PatrickHand-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
