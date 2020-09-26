@@ -7,17 +7,16 @@ class SignUpService {
   final BaseService _baseService = BaseService();
   final Configs _configs = Configs();
   
-  String createActiveUserUrl(String uid){
-    return _configs.activeUserUrl + '?uid=$uid';
+  String createactivateUserUrl(String uid){
+    return _configs.activateUserUrl + '?uid=$uid';
+  }
+
+  String createDeleteUserUrl(String uid){
+    return _configs.deleteUserUrl + '?uid=$uid';
   }
 
   Future createUser(Map<String, dynamic> dataMap) async {
     var res = _baseService.basePostRequest(dynamicUrl: _configs.createUserUrl, dataMap: dataMap);
-    return res;
-  }
-
-  Future activeUser(Map<String, dynamic> dataMap) async {    
-    var res = _baseService.basePutRequest(dynamicUrl: _configs.activeUserUrl, dataMap: dataMap);
     return res;
   }
 }

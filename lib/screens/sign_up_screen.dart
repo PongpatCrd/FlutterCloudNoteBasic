@@ -25,6 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   
   String _errorMsg;
   Function _alertSetStateFunction;
+  bool _loadingActive = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,77 +37,80 @@ class _SignUpScreenState extends State<SignUpScreen> {
           currentFocus.unfocus();
         }
       },
-      child: Scaffold(
-        backgroundColor: Colors.yellow[50],
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Center(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    AlertBar(
-                      errorMsg: _errorMsg, 
-                      alertSetStateFunction: _alertSetStateFunction
+      child: LoadingWrapper(
+        loadingActive: _loadingActive,
+        child: Scaffold(
+          backgroundColor: Colors.yellow[50],
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child: AlertBar(
+                errorMsg: _errorMsg, 
+                alertSetStateFunction: _alertSetStateFunction,
+                child: Center(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.20,
+                        ),
+                        Container(
+                          width: 320,
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: _entryFormField(
+                            'Username',
+                            controller: _usernameController,
+                            validator: _usernameValidator,
+                          ),
+                        ),
+                        Container(
+                          width: 320,
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: _entryFormField(
+                            'Password',
+                            isPassword: true,
+                            controller: _passwordController,
+                            validator: _passwordValidator,
+                          ),
+                        ),
+                        Container(
+                          width: 320,
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: _entryFormField(
+                            'Confirm Password',
+                            isPassword: true,
+                            controller: _confirmPasswordController,
+                          ),
+                        ),
+                        Container(
+                          width: 320,
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: _entryFormField(
+                            'Display Name',
+                            controller: _displayNameController,
+                            validator: _displayNameValidator,
+                          ),
+                        ),
+                        Container(
+                          width: 320,
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: _entryFormField(
+                            'Email',
+                            controller: _emailController,
+                            validator: _emailValidator,
+                          ),
+                        ),
+                        Container(
+                          width: 170,
+                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                          child: _signupButton(),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.25,
-                    ),
-                    Container(
-                      width: 320,
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: _entryFormField(
-                        'Username',
-                        controller: _usernameController,
-                        validator: _usernameValidator,
-                      ),
-                    ),
-                    Container(
-                      width: 320,
-                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                      child: _entryFormField(
-                        'Password',
-                        isPassword: true,
-                        controller: _passwordController,
-                        validator: _passwordValidator,
-                      ),
-                    ),
-                    Container(
-                      width: 320,
-                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                      child: _entryFormField(
-                        'Confirm Password',
-                        isPassword: true,
-                        controller: _confirmPasswordController,
-                      ),
-                    ),
-                    Container(
-                      width: 320,
-                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                      child: _entryFormField(
-                        'Display Name',
-                        controller: _displayNameController,
-                        validator: _displayNameValidator,
-                      ),
-                    ),
-                    Container(
-                      width: 320,
-                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                      child: _entryFormField(
-                        'Email',
-                        controller: _emailController,
-                        validator: _emailValidator,
-                      ),
-                    ),
-                    Container(
-                      width: 230,
-                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                      child: _signupButton(),
-                    ),
-                  ],
+                  )
                 ),
               )
-            )
+            ),
           ),
         ),
       ),
@@ -149,24 +153,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
         borderRadius: BorderRadius.circular(20),
         borderSide: BorderSide.none
       ),
-      child: Text(
-        'Sign Up',
-        style: TextStyle(
-          fontWeight: FontWeight.bold
-        ),
+      child: Row(
+        children: <Widget>[
+          Icon(
+            Icons.person_add
+          ), 
+          Flexible(
+            fit: FlexFit.tight,
+            child: Text(
+              'Sign Up',
+              style: TextStyle(
+                fontWeight: FontWeight.bold
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
       onPressed: () async {
         FocusScopeNode currentFocus = FocusScope.of(context);
         currentFocus.unfocus();
 
-        if (_formKey.currentState.validate()) {
+        setState(() {
+          _loadingActive = true;
+        });
 
+        if (_formKey.currentState.validate()) {
           var resCreateUser = await widget._signUpService.createUser({
             "username"       : _usernameController.text,
             "password"       : _passwordController.text,
             "display_name"   : _displayNameController.text,
             "email"          : _emailController.text,
-            });
+          });
 
           print(resCreateUser);
 
@@ -174,17 +192,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
             var user = resCreateUser['data']['user'];
             var userProfile = resCreateUser['data']['userProfile'];
 
-            String activeUserUrl = widget._signUpService.createActiveUserUrl(user['uid']);
+            String activeUserUrl = widget._signUpService.createactivateUserUrl(user['uid']);
+            String deleteUserurl = widget._signUpService.createDeleteUserUrl(user['uid']);
 
             String content = '''
-            <h1>
+            <h3>
               You use email <p style="color: red;">${userProfile['email']}</p> sign up to Note Me.
-            </h1>
+            </h3>
+            <h5>
+              <p>
+                Is that is you? Please confirm to complete this action.
+              </p>
+            </h5>
             <p>
-              Is that is you? Please confirm to complete this action.
-            </p>
-            <p>
-              Click this link to confirm <a href="$activeUserUrl">$activeUserUrl</a>
+              Continue sign up with this email <a href="$activeUserUrl"><b> Activate this user </b></a>
+              <br>
+              Cancel sign up with this email <a href="$deleteUserurl"><b style="color: red;"> Dismiss this action </b></a>
             </p>
             ''';
 
@@ -194,24 +217,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
               'content' : content,
             });
 
-            Navigator.pushReplacementNamed(context, '/sign_in');
-
+            Navigator.of(context).pop();
           }
           else{
             setState(() {
               _errorMsg = resCreateUser['msg'];
+              _loadingActive = false;
+
               _alertSetStateFunction = () {
-                // for make Alert().alertBar can close with icon
+                // for make AlertBar can close with icon
                 setState(() {
                   _errorMsg = null;
                 });
               };
+
             });
           }
         }
         else {
           setState(() {
             _errorMsg = "Please correct form data.";
+            _loadingActive = false;
+
             _alertSetStateFunction = () {
               // for make Alert().alertBar can close with icon
               setState(() {
@@ -220,6 +247,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             };
           });
         }
+
       },
     );
   }

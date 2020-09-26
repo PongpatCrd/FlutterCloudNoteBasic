@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cloud_note/services/sign_in_service.dart';
+import 'package:flutter_cloud_note/shared_materials/base_material.dart';
 
 class SignInScreen extends StatefulWidget {
   final SignInService _signInService = SignInService();
@@ -108,51 +109,87 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
+  Widget _signUpButton(BuildContext context) {
+    return FlatButton(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      child: Text(
+        'Sign up',
+        style: TextStyle(
+          decoration: TextDecoration.underline,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      onPressed: () {
+        Navigator.pushNamed(context, '/sign_up');
+      }
+    );
+  }
+
+  bool _loadingActive = false;
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
     
-    return Scaffold(
-      backgroundColor: Colors.yellow[50],
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.30,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: LoadingWrapper(
+        loadingActive: _loadingActive,
+        child: Scaffold(
+          backgroundColor: Colors.yellow[50],
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.30,
+                    ),
+                    Container(
+                      width: 400,
+                      child: _entryField("Username", icon: Icon(Icons.person)),
+                    ),
+                    Container(
+                      width: 400,
+                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: _entryField("Password", icon: Icon(Icons.lock), isPassword: true)
+                    ),
+                    Container(
+                      width: 230,
+                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: _normalSignInButton(),
+                    ),
+                    Container(
+                      width: 230,
+                      margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                      child: _googleSignInButton(context),
+                    ),
+                    Container(
+                      width: 230,
+                      margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
+                      child: _guestSigInButton(context),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: _signUpButton(context),
+                    ),
+                  ],
                 ),
-                Container(
-                  width: 400,
-                  child: _entryField("Username", icon: Icon(Icons.person)),
-                ),
-                Container(
-                  width: 400,
-                  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                  child: _entryField("Password", icon: Icon(Icons.lock), isPassword: true)
-                ),
-                Container(
-                  width: 230,
-                  margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                  child: _normalSignInButton(),
-                ),
-                Container(
-                  width: 230,
-                  margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
-                  child: _googleSignInButton(context),
-                ),
-                Container(
-                  width: 230,
-                  margin: EdgeInsets.fromLTRB(0, 2, 0, 0),
-                  child: _guestSigInButton(context),
-                ),
-              ],
+              ),
             ),
           ),
         ),
       ),
     );
+
   }
 }

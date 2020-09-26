@@ -19,7 +19,7 @@ import 'package:flutter_cloud_note/screens/splash_screen.dart';
 // test
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/sign_up',
+    initialRoute: '/sign_in',
     routes: {
       '/home': (context) => HomeScreen(),
       '/sign_in': (context) => SignInScreen(),
