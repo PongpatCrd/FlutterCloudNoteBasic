@@ -3,6 +3,7 @@ import 'package:string_validator/string_validator.dart';
 import 'package:flutter_cloud_note/services/helper_service.dart';
 import 'package:flutter_cloud_note/services/sign_up_service.dart';
 import 'package:flutter_cloud_note/shared_materials/base_material.dart';
+import 'package:flutter_cloud_note/shared_materials/layout_meterial.dart';
 
 class SignUpScreen extends StatefulWidget {
 
@@ -24,8 +25,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _emailController           = TextEditingController();
   
   String _errorMsg;
-  Function _alertSetStateFunction;
+  Function _alertBarStateFunction;
   bool _loadingActive = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,75 +43,78 @@ class _SignUpScreenState extends State<SignUpScreen> {
         loadingActive: _loadingActive,
         child: Scaffold(
           backgroundColor: Colors.yellow[50],
-          body: SingleChildScrollView(
-            child: SafeArea(
-              child: AlertBar(
-                errorMsg: _errorMsg, 
-                alertSetStateFunction: _alertSetStateFunction,
-                child: Center(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.20,
-                        ),
-                        Container(
-                          width: 320,
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: _entryFormField(
-                            'Username',
-                            controller: _usernameController,
-                            validator: _usernameValidator,
-                          ),
-                        ),
-                        Container(
-                          width: 320,
-                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: _entryFormField(
-                            'Password',
-                            isPassword: true,
-                            controller: _passwordController,
-                            validator: _passwordValidator,
-                          ),
-                        ),
-                        Container(
-                          width: 320,
-                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: _entryFormField(
-                            'Confirm Password',
-                            isPassword: true,
-                            controller: _confirmPasswordController,
-                          ),
-                        ),
-                        Container(
-                          width: 320,
-                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: _entryFormField(
-                            'Display Name',
-                            controller: _displayNameController,
-                            validator: _displayNameValidator,
-                          ),
-                        ),
-                        Container(
-                          width: 320,
-                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: _entryFormField(
-                            'Email',
-                            controller: _emailController,
-                            validator: _emailValidator,
-                          ),
-                        ),
-                        Container(
-                          width: 170,
-                          margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
-                          child: _signupButton(),
-                        ),
-                      ],
-                    ),
-                  )
+          body: SafeArea(
+            child: BaseLayout(
+              appBar: BaseAppBar(
+                title: Text(
+                  'Sign Up'
                 ),
-              )
+              ),
+              alertBar: AlertBar(
+                errorMsg: _errorMsg,
+                alertBarStateFunction: _alertBarStateFunction
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.20,
+                    ),
+                    Container(
+                      width: 320,
+                      margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: _entryFormField(
+                        'Username',
+                        controller: _usernameController,
+                        validator: _usernameValidator,
+                      ),
+                    ),
+                    Container(
+                      width: 320,
+                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: _entryFormField(
+                        'Password',
+                        isPassword: true,
+                        controller: _passwordController,
+                        validator: _passwordValidator,
+                      ),
+                    ),
+                    Container(
+                      width: 320,
+                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: _entryFormField(
+                        'Confirm Password',
+                        isPassword: true,
+                        controller: _confirmPasswordController,
+                      ),
+                    ),
+                    Container(
+                      width: 320,
+                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: _entryFormField(
+                        'Display Name',
+                        controller: _displayNameController,
+                        validator: _displayNameValidator,
+                      ),
+                    ),
+                    Container(
+                      width: 320,
+                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: _entryFormField(
+                        'Email',
+                        controller: _emailController,
+                        validator: _emailValidator,
+                      ),
+                    ),
+                    Container(
+                      width: 170,
+                      margin: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: _signupButton(),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -224,13 +229,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               _errorMsg = resCreateUser['msg'];
               _loadingActive = false;
 
-              _alertSetStateFunction = () {
-                // for make AlertBar can close with icon
-                setState(() {
-                  _errorMsg = null;
-                });
-              };
-
             });
           }
         }
@@ -239,8 +237,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             _errorMsg = "Please correct form data.";
             _loadingActive = false;
 
-            _alertSetStateFunction = () {
-              // for make Alert().alertBar can close with icon
+            _alertBarStateFunction = () {
               setState(() {
                 _errorMsg = null;
               });
