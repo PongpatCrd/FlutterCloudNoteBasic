@@ -19,4 +19,5 @@ class SignUpService {
     var res = _baseService.basePostRequest(dynamicUrl: _configs.createUserUrl, dataMap: dataMap);
     return res;
   }
+
 }

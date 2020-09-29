@@ -33,65 +33,59 @@ class BaseAppBar extends StatelessWidget {
   }
 }
 
-class PersistentHeader extends SliverPersistentHeaderDelegate {
+// class PersistentHeader extends SliverPersistentHeaderDelegate {
 
-  final PreferredSize child;
+//   final PreferredSize child;
+
+//   PersistentHeader({this.child});
+
+//   @override
+//   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+//     // TODO: implement build
+//     return child;
+//   }
+
+//   @override
+//   // TODO: implement maxExtent
+//   double get maxExtent => child.preferredSize.height;
+
+//   @override
+//   // TODO: implement minExtent
+//   double get minExtent => child.preferredSize.height;
+
+//   @override
+//   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
+//     // TODO: implement shouldRebuild
+//     return false;
+//   }
+// }
+
+class PersistentHeader extends SliverPersistentHeaderDelegate {
+  final Widget child;
 
   PersistentHeader({this.child});
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    // TODO: implement build
-    return child;
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: child,
+    );
   }
 
   @override
-  // TODO: implement maxExtent
-  double get maxExtent => child.preferredSize.height;
+  double get maxExtent => 56.0;
 
   @override
-  // TODO: implement minExtent
-  double get minExtent => child.preferredSize.height;
+  double get minExtent => 56.0;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    // TODO: implement shouldRebuild
-    return false;
+    return true;
   }
 }
-
-// class BaseLayout extends StatelessWidget {
-
-//   final Widget appBar;
-//   final Widget alertBar;
-//   final Widget child;
-
-//   BaseLayout({this.appBar, this.alertBar, this.child});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return CustomScrollView(
-//       slivers: <Widget>[
-//         SliverToBoxAdapter(
-//           child: appBar,
-//         ),
-//         SliverPersistentHeader(
-//           pinned: true,
-//           delegate: PersistentHeader(
-//             child: PreferredSize(
-//               preferredSize: Size.fromHeight(45),
-//               child: alertBar, 
-//             )
-//           ),
-//         ),
-//         SliverToBoxAdapter(
-//           child: child,
-//         )
-//       ],
-//     );
-//   }
-// }
-
 
 class BaseLayout extends StatelessWidget {
 
@@ -105,11 +99,7 @@ class BaseLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: <Widget>[
-        BaseAppBar(
-          title: Text(
-            'test'
-          ),
-        ),
+        appBar,
         SliverPersistentHeader(
           pinned: true,
           delegate: PersistentHeader(
@@ -121,8 +111,17 @@ class BaseLayout extends StatelessWidget {
         ),
         SliverToBoxAdapter(
           child: child,
-        )
+        ),
       ],
+    );
+  }
+}
+
+class BaseEmptyLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      
     );
   }
 }

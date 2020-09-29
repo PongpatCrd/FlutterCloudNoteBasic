@@ -12,21 +12,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RaisedButton(
-        child: Text(
-          'Logout'
+      body: SafeArea(
+        child: RaisedButton(
+          child: Text(
+            'Logout'
+          ),
+          onPressed: () {
+            widget._signInService.signOut();
+            
+            widget._signInService.getUId().then((uid) {
+              print(uid);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                '/sign_in',
+                (Route<dynamic> route) => false
+              );
+            });
+          }
         ),
-        onPressed: () {
-          widget._signInService.signOut();
-          
-          widget._signInService.getUId().then((uid) {
-            print(uid);
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              '/sign_in',
-              (Route<dynamic> route) => false
-            );
-          });
-        }
       ),
     );
   }

@@ -1,8 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'package:flutter_cloud_note/services/base_service.dart';
+import 'package:flutter_cloud_note/configs.dart';
+
 
 class SignInService {
+
+  final BaseService _baseService = BaseService();
+  final Configs _configs = Configs();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -41,6 +47,12 @@ class SignInService {
       uid = user.uid.toString();
     }
     return uid;
+  }
+
+  // use for in app sign up
+  Future authUser(Map<String, dynamic> dataMap) async {
+    var res = _baseService.basePostRequest(dynamicUrl: _configs.authUserUrl, dataMap: dataMap);
+    return res;
   }
 
   void signOut() async {
