@@ -33,33 +33,6 @@ class BaseAppBar extends StatelessWidget {
   }
 }
 
-// class PersistentHeader extends SliverPersistentHeaderDelegate {
-
-//   final PreferredSize child;
-
-//   PersistentHeader({this.child});
-
-//   @override
-//   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-//     // TODO: implement build
-//     return child;
-//   }
-
-//   @override
-//   // TODO: implement maxExtent
-//   double get maxExtent => child.preferredSize.height;
-
-//   @override
-//   // TODO: implement minExtent
-//   double get minExtent => child.preferredSize.height;
-
-//   @override
-//   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-//     // TODO: implement shouldRebuild
-//     return false;
-//   }
-// }
-
 class PersistentHeader extends SliverPersistentHeaderDelegate {
   final Widget child;
 
@@ -103,25 +76,13 @@ class BaseLayout extends StatelessWidget {
         SliverPersistentHeader(
           pinned: true,
           delegate: PersistentHeader(
-            child: PreferredSize(
-              preferredSize: Size.fromHeight(45),
-              child: alertBar, 
-            )
+            child: alertBar
           ),
         ),
         SliverToBoxAdapter(
           child: child,
         ),
       ],
-    );
-  }
-}
-
-class BaseEmptyLayout extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      
     );
   }
 }

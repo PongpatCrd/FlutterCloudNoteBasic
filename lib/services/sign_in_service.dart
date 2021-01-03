@@ -51,6 +51,7 @@ class SignInService {
 
   // use for in app sign up
   Future authUser(Map<String, dynamic> dataMap) async {
+    print(dataMap);
     var res = _baseService.basePostRequest(dynamicUrl: _configs.authUserUrl, dataMap: dataMap);
     return res;
   }

@@ -176,142 +176,61 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ],
       ),
       onPressed: () async {
-        // FocusScopeNode currentFocus = FocusScope.of(context);
-        // currentFocus.unfocus();
-
-        // setState(() {
-        //   _loadingActive = true;
-        // });
-
-        // if (_formKey.currentState.validate()) {
-        //   var resCreateUser = await widget._signUpService.createUser({
-        //     "username"       : _usernameController.text,
-        //     "password"       : _passwordController.text,
-        //     "display_name"   : _displayNameController.text,
-        //     "email"          : _emailController.text,
-        //   });
-
-        //   print(resCreateUser);
-
-        //   if (resCreateUser['success']) {
-        //     var user = resCreateUser['data']['user'];
-        //     var userProfile = resCreateUser['data']['userProfile'];
-
-        //     String activeUserUrl = widget._signUpService.createactivateUserUrl(user['uid']);
-        //     String deleteUserurl = widget._signUpService.createDeleteUserUrl(user['uid']);
-
-        //     String content = '''
-        //     <h3>
-        //       You use email <p style="color: red;">${userProfile['email']}</p> sign up to Note Me.
-        //     </h3>
-        //     <h5>
-        //       <p>
-        //         Is that is you? Please confirm to complete this action.
-        //       </p>
-        //     </h5>
-        //     <p>
-        //       Continue sign up with this email <a href="$activeUserUrl"><b> Activate this user </b></a>
-        //       <br>
-        //       Cancel sign up with this email <a href="$deleteUserurl"><b style="color: red;"> Cancel this action </b></a>
-        //     </p>
-        //     ''';
-
-        //     var resSendEmail = await widget._helperService.sendEmail({
-        //       'to_email': userProfile['email'],
-        //       'subject' : 'Confirm your email address to use Note Me',
-        //       'content' : content,
-        //     });
-
-        //     Navigator.of(context).pop();
-        //   }
-        //   else{
-        //     setState(() {
-        //       _errorMsg = resCreateUser['msg'];
-        //       _loadingActive = false;
-
-        //     });
-        //   }
-        // }
-        // else {
-        //   setState(() {
-        //     _errorMsg = "Please correct form data.";
-        //     _loadingActive = false;
-
-        //     _alertBarStateFunction = () {
-        //       setState(() {
-        //         _errorMsg = null;
-        //       });
-        //     };
-        //   });
-        // }
-
-
-
-
         FocusScopeNode currentFocus = FocusScope.of(context);
         currentFocus.unfocus();
 
+        setState(() {
+          _loadingActive = true;
+        });
+
         if (_formKey.currentState.validate()) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertPopUp(
-                descLabel: 'Continue with these detail?',
-                positiveAction: () async {
-                  setState(() {
-                    _loadingActive = true;
-                  });
+          var resCreateUser = await widget._signUpService.createUser({
+            "username"       : _usernameController.text,
+            "password"       : _passwordController.text,
+            "display_name"   : _displayNameController.text,
+            "email"          : _emailController.text,
+          });
 
-                  var resCreateUser = await widget._signUpService.createUser({
-                    "username"       : _usernameController.text,
-                    "password"       : _passwordController.text,
-                    "display_name"   : _displayNameController.text,
-                    "email"          : _emailController.text,
-                  });
+          print(resCreateUser);
 
-                  print(resCreateUser);
+          if (resCreateUser['success']) {
+            var user = resCreateUser['data']['user'];
+            var userProfile = resCreateUser['data']['userProfile'];
 
-                  if (resCreateUser['success']) {
-                    var user = resCreateUser['data']['user'];
-                    var userProfile = resCreateUser['data']['userProfile'];
+            String activeUserUrl = widget._signUpService.createactivateUserUrl(user['uid']);
+            String deleteUserurl = widget._signUpService.createDeleteUserUrl(user['uid']);
 
-                    String activeUserUrl = widget._signUpService.createactivateUserUrl(user['uid']);
-                    String deleteUserurl = widget._signUpService.createDeleteUserUrl(user['uid']);
+            String content = '''
+            <h3>
+              You use email <p style="color: red;">${userProfile['email']}</p> sign up to Note Me.
+            </h3>
+            <h5>
+              <p>
+                Is that is you? Please confirm to complete this action.
+              </p>
+            </h5>
+            <p>
+              Continue sign up with this email <a href="$activeUserUrl"><b> Activate this user </b></a>
+              <br>
+              Cancel sign up with this email <a href="$deleteUserurl"><b style="color: red;"> Cancel this action </b></a>
+            </p>
+            ''';
 
-                    String content = '''
-                    <h3>
-                      You use email <p style="color: red;">${userProfile['email']}</p> sign up to Note Me.
-                    </h3>
-                    <h5>
-                      <p>
-                        Is that is you? Please confirm to complete this action.
-                      </p>
-                    </h5>
-                    <p>
-                      Continue sign up with this email <a href="$activeUserUrl"><b> Activate this user </b></a>
-                      <br>
-                      Cancel sign up with this email <a href="$deleteUserurl"><b style="color: red;"> Cancel this action </b></a>
-                    </p>
-                    ''';
+            var resSendEmail = await widget._helperService.sendEmail({
+              'to_email': userProfile['email'],
+              'subject' : 'Confirm your email address to use Note Me',
+              'content' : content,
+            });
 
-                    var resSendEmail = await widget._helperService.sendEmail({
-                      'to_email': userProfile['email'],
-                      'subject' : 'Confirm your email address to use Note Me',
-                      'content' : content,
-                    });
+            Navigator.of(context).pop();
+          }
+          else{
+            setState(() {
+              _errorMsg = resCreateUser['msg'];
+              _loadingActive = false;
 
-                    Navigator.of(context).pop();
-                  }
-                  else{
-                    setState(() {
-                      _errorMsg = resCreateUser['msg'];
-                      _loadingActive = false;
-
-                    });
-                  }
-                },);
-            }
-          );
+            });
+          }
         }
         else {
           setState(() {

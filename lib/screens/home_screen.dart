@@ -18,15 +18,14 @@ class _HomeScreenState extends State<HomeScreen> {
             'Logout'
           ),
           onPressed: () {
+
             widget._signInService.signOut();
-            
-            widget._signInService.getUId().then((uid) {
-              print(uid);
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                '/sign_in',
-                (Route<dynamic> route) => false
-              );
-            });
+
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              '/sign_in',
+              (Route<dynamic> route) => false
+            );
+
           }
         ),
       ),
